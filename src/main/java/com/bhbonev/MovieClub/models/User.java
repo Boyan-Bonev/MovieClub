@@ -1,5 +1,6 @@
 package com.bhbonev.MovieClub.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,9 +15,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(, unique = true, nullable = false)
     private String username;
 
+    @Column(, nullable = false)
     private String password;
+
+    private String role = "ROLE_USER";
 
     public Long getId() {
         return id;
@@ -40,5 +45,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

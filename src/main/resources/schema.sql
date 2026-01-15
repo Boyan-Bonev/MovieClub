@@ -3,20 +3,28 @@ USE movie_db;
 
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
+    username VARCHAR(64) UNIQUE NOT NULL,
+    password VARCHAR(256) NOT NULL,
+    enabled BOOLEAN NOT NULL,
+    role VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS authorities (
+    username VARCHAR(50) NOT NULL,
+    authority VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_authorities_users FOREIGN KEY (username) REFERENCES users(username)
 );
 
 CREATE TABLE IF NOT EXISTS movies (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL,
+    title VARCHAR(256) NOT NULL,
     release_date DATETIME NOT NULL,
-    director VARCHAR(100)
+    director VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    review_title VARCHAR(255),
+    review_title VARCHAR(256),
     review_text TEXT,
     user_id INTEGER,
     movie_id INTEGER,
@@ -26,7 +34,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 
 CREATE TABLE IF NOT EXISTS lists (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(128) NOT NULL,
     user_id INTEGER,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
