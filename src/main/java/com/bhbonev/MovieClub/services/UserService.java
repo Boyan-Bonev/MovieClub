@@ -1,9 +1,13 @@
 package com.bhbonev.MovieClub.services;
 
+import com.bhbonev.MovieClub.dtos.UserDto;
+import com.bhbonev.MovieClub.exceptions.UsernameAlreadyExistsException;
+import com.bhbonev.MovieClub.models.Authority;
 import com.bhbonev.MovieClub.models.User;
+import com.bhbonev.MovieClub.repositories.AuthorityRepository;
 import com.bhbonev.MovieClub.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,24 +20,30 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void registerUser(String username, String password) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user);
+    @Transactional
+    public void registerUser(UserDto userDto) {
+        if (userRepository.existsByUsername(userDto.getUsername())) {
+            throw new UsernameAlreadyExistsException("Username taken!");
+        }
+
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        User savedUser = userRepository.save(new User(userDto));
+        //TODO: validate password and username
+
+        Authority authority = new Authority(userDto.getAuthority(), savedUser);
+        authorityRepository.save(authority);
+
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                .roles("USER") // Matches the ROLE_USER prefix
-                .build();
+        return user;
     }
 }
