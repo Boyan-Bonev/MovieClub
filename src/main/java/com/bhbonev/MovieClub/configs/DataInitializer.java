@@ -15,7 +15,7 @@ public class DataInitializer {
     @Autowired
     private UserService userService;
 
-    @Value("${app.admin.password}")
+    @Value("${movieclub.admin.password}")
     private String password;
 
     @Bean
