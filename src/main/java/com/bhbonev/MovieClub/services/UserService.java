@@ -27,7 +27,7 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void registerUser(UserDto userDto) {
+    public User registerUser(UserDto userDto) {
         if (userRepository.existsByUsername(userDto.getUsername())) {
             throw new UsernameAlreadyExistsException("Username taken!");
         }
@@ -43,6 +43,8 @@ public class UserService implements UserDetailsService {
 
         Authority authority = new Authority(userDto.getAuthority(), savedUser);
         authorityRepository.save(authority);
+
+        return savedUser;
     }
 
     @Override

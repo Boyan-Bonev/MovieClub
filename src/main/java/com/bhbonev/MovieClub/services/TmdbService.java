@@ -4,6 +4,7 @@ import com.bhbonev.MovieClub.dtos.TmdbResponse;
 import com.bhbonev.MovieClub.models.Movie;
 import com.bhbonev.MovieClub.repositories.MovieRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,19 +31,22 @@ public class TmdbService {
         URL = "https://api.themoviedb.org/3/movie/popular?api_key=" + API_KEY;
     }
 
-    public void importPopularMovies() {
+    @Transactional
+    public List<Movie> importPopularMovies() {
         TmdbResponse response = restTemplate.getForObject(URL, TmdbResponse.class);
 
-        if (response != null && response.getResults() != null) {
-            List<Movie> movies = response.getResults().stream().map(dto -> {
-                Movie movie = new Movie();
-                movie.setTitle(dto.getTitle());
-                movie.setOverview(dto.getOverview());
-                movie.setReleaseDate(dto.getReleaseDate());
-                return movie;
-            }).collect(Collectors.toList());
-
-            movieRepository.saveAll(movies);
+        if (response == null || response.getResults() == null) {
+            return null;
         }
+
+        List<Movie> movies = response.getResults().stream().map(dto -> {
+            Movie movie = new Movie();
+            movie.setTitle(dto.getTitle());
+            movie.setOverview(dto.getOverview());
+            movie.setReleaseDate(dto.getReleaseDate());
+            return movie;
+        }).collect(Collectors.toList());
+
+        return (List<Movie>) movieRepository.saveAll(movies);
     }
 }
