@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "listEntries")
-public class ListEntry {
+public class MovieListEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class ListEntry {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "listId", nullable = false)
-    private List list;
+    private MovieList movieList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movieId", nullable = false)
@@ -34,12 +34,12 @@ public class ListEntry {
         this.id = id;
     }
 
-    public List getList() {
-        return list;
+    public MovieList getMovieList() {
+        return movieList;
     }
 
-    public void setList(List list) {
-        this.list = list;
+    public void setMovieList(MovieList movieList) {
+        this.movieList = movieList;
     }
 
     public Movie getMovie() {

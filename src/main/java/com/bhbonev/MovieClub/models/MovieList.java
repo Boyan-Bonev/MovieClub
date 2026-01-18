@@ -1,6 +1,7 @@
 package com.bhbonev.MovieClub.models;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,20 +16,21 @@ import java.util.Set;
 
 @Entity
 @Table(name = "lists")
-public class List {
+public class MovieList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<ListEntry> listEntries;
+    @OneToMany(mappedBy = "movieList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<MovieListEntry> movieListEntries;
 
     public Long getId() {
         return id;
@@ -54,11 +56,11 @@ public class List {
         this.user = user;
     }
 
-    public Set<ListEntry> getListEntries() {
-        return listEntries;
+    public Set<MovieListEntry> getMovieListEntries() {
+        return movieListEntries;
     }
 
-    public void setListEntries(Set<ListEntry> listEntries) {
-        this.listEntries = listEntries;
+    public void setMovieListEntries(Set<MovieListEntry> movieListEntries) {
+        this.movieListEntries = movieListEntries;
     }
 }
