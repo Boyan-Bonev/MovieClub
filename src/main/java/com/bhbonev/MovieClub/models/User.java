@@ -10,9 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "users")
@@ -33,6 +35,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Authority> authorities;
+
+    @Transient
+    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,16}$";
+    @Transient
+    private static final String USERNAME_PATTERN = "^[a-zA-Z0-9][a-zA-Z0-9._]{2,14}[a-zA-Z0-9]$";
+
 
     public User(UserDto userDto) {
         this.setUsername(userDto.getUsername());
@@ -81,5 +89,13 @@ public class User implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public static boolean isValidUsername(String username) {
+        return Pattern.matches(USERNAME_PATTERN, username);
+    }
+
+    public static boolean isValidPassword(String password) {
+        return Pattern.matches(PASSWORD_PATTERN, password);
     }
 }
