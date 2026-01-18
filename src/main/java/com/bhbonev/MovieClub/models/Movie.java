@@ -21,14 +21,28 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private LocalDate releaseDate;
 
     @Column(columnDefinition = "TEXT")
     private String overview;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<ListEntry> listEntries;
+    private Set<MovieListEntry> listEntries;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Review> reviews;
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public Long getId() {
         return id;

@@ -37,7 +37,10 @@ public class User implements UserDetails {
     private Set<Authority> authorities;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<List> lists;
+    private Set<MovieList> movieLists;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Review> reviews;
 
     @Transient
     private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,16}$";
@@ -54,12 +57,20 @@ public class User implements UserDetails {
 
     }
 
-    public Set<List> getLists() {
-        return lists;
+    public Set<Review> getReviews() {
+        return reviews;
     }
 
-    public void setLists(Set<List> lists) {
-        this.lists = lists;
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Set<MovieList> getLists() {
+        return movieLists;
+    }
+
+    public void setLists(Set<MovieList> movieLists) {
+        this.movieLists = movieLists;
     }
 
     public Long getId() {
