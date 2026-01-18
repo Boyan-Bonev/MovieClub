@@ -1,7 +1,9 @@
 package com.bhbonev.MovieClub.configs;
 
 import com.bhbonev.MovieClub.dtos.UserDto;
+import com.bhbonev.MovieClub.repositories.MovieRepository;
 import com.bhbonev.MovieClub.repositories.UserRepository;
+import com.bhbonev.MovieClub.services.TmdbService;
 import com.bhbonev.MovieClub.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,17 +17,23 @@ public class DataInitializer {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TmdbService tmdbService;
+
     @Value("${movieclub.admin.password}")
     private String password;
 
     @Bean
-    CommandLineRunner initDatabase(UserRepository userRepository) {
+    CommandLineRunner initDatabase(UserRepository userRepository, MovieRepository movieRepository) {
         return args -> {
             if (userRepository.count() == 0) {
                 userService.registerUser(
                         new UserDto("admin", password, "ROLE_ADMIN"));
                 userService.registerUser(
                         new UserDto("user", password, null));
+            }
+            if (movieRepository.count() == 0) {
+                tmdbService.importPopularMovies();
             }
         };
     }
