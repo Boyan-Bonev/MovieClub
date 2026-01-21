@@ -8,11 +8,15 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -42,11 +46,32 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Review> reviews;
 
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Follower> followers; // who the user follows
+    @ManyToMany
+    @JoinTable(
+            name = "userFollows",
+            joinColumns = @JoinColumn(name = "followerId"),
+            inverseJoinColumns = @JoinColumn(name = "followeeId")
+    )
+    private Set<User> followees = new HashSet<>(); // who follows the user
 
-    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Follower> followees; // who follows the user
+    @ManyToMany(mappedBy = "followees")
+    private Set<User> followers = new HashSet<>(); // who the user follows
+
+    @ManyToMany
+    @JoinTable(
+            name = "userLikedReviews",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "reviewId")
+    )
+    private Set<Review> likedReviews = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_liked_lists",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "listId")
+    )
+    private Set<MovieList> likedLists = new HashSet<>();
 
     @Transient
     private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,16}$";
@@ -63,7 +88,21 @@ public class User implements UserDetails {
 
     }
 
+    public Set<Review> getLikedReviews() {
+        return likedReviews;
+    }
 
+    public void setLikedReviews(Set<Review> likedReviews) {
+        this.likedReviews = likedReviews;
+    }
+
+    public Set<MovieList> getLikedLists() {
+        return likedLists;
+    }
+
+    public void setLikedLists(Set<MovieList> likedLists) {
+        this.likedLists = likedLists;
+    }
 
     public Set<Review> getReviews() {
         return reviews;

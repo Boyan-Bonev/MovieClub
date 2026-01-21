@@ -7,11 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "reviews")
@@ -36,6 +39,9 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movieId", nullable = false)
     private Movie movie;
+
+    @ManyToMany(mappedBy = "likedReviews")
+    private Set<User> likedByUsers = new HashSet<>();
 
     public String getReviewText() {
         return reviewText;

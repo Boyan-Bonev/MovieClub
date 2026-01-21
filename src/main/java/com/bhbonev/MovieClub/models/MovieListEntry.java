@@ -19,11 +19,11 @@ public class MovieListEntry {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "listId", nullable = false)
+    @JoinColumn(name = "movieListId", nullable = false)
     private MovieList movieList;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movieId", nullable = false)
+    @JoinColumn(name = "movie", nullable = false)
     private Movie movie;
 
     public Long getId() {
