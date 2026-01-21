@@ -42,6 +42,12 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Review> reviews;
 
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Follower> followers; // who the user follows
+
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Follower> followees; // who follows the user
+
     @Transient
     private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,16}$";
     @Transient
@@ -56,6 +62,8 @@ public class User implements UserDetails {
     public User() {
 
     }
+
+
 
     public Set<Review> getReviews() {
         return reviews;
