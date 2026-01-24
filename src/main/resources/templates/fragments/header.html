@@ -1,73 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<header th:fragment="universalHeader">
-    <nav class = "headerNav">
-        <a href="/home">Home</a>
+    <header th:fragment="universalHeader">
+        <nav class = "headerNav">
+            <a href="/home">Home</a>
 
-        <th:block th:if="${isLoggedIn}">
-            <p th:text = "${username}">Username</p>
+            <th:block th:if="${isLoggedIn}">
+                <p th:text = "${username}">Username</p>
 
-            <a href="/profile">Profile</a>
+                <a href="/profile">Profile</a>
 
-            <button onclick="openPopup('reviewPopup')">Add Review</button>
+                <button onclick="openPopup('reviewPopup')">Add Review</button>
 
-            <div id="reviewPopup" class="popup">
-                <div id="reviewPopupContent" class="popupContent">
-                    <span class="close" onclick="closePopup('reviewPopup')">&times;</span>
-                    <h2>Write a Review</h2>
+                <div id="reviewPopup" class="popup">
+                    <div id="reviewPopupContent" class="popupContent">
+                        <span class="close" onclick="closePopup('reviewPopup')">&times;</span>
+                        <h2>Write a Review</h2>
 
-                    <form th:action="@{/reviews/add}" method="post">
-                        <div class="autocomplete">
-                            <input id="movieSearch" type="text" name="movieTitle" placeholder="Enter movie title..." required autocomplete="off">
-                            <div id="reviewResultsList" class="autocompleteItems"></div>
-                        </div>
+                        <form th:action="@{/reviews/add}" method="post">
+                            <div class="autocomplete">
+                                <input id="movieSearch" type="text" name="movieTitle" placeholder="Enter movie title..." required autocomplete="off">
+                                <div id="reviewResultsList" class="autocompleteItems"></div>
+                            </div>
 
-                        <div class="ratingContainer">
-                            <label>Rating:</label>
-                            <input type="range" name="rating" min="1" max="10" value="5" oninput="this.nextElementSibling.value = this.value">
-                            <output>5</output> / 10
-                        </div>
+                            <div class="ratingContainer">
+                                <label>Rating:</label>
+                                <input type="range" name="rating" min="1" max="10" value="5" oninput="this.nextElementSibling.value = this.value">
+                                <output>5</output> / 10
+                            </div>
 
-                        <textarea name="content" placeholder="What did you think?" required></textarea>
+                            <textarea name="content" placeholder="What did you think?" required></textarea>
 
-                        <button type="submit" class="btnAdd">Post Review</button>
-                    </form>
+                            <button type="submit" class="btnAdd">Post Review</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
 
-            <button onclick="openPopup('listPopup')">Add List</button>
+                <button onclick="openPopup('listPopup')">Add List</button>
 
-            <div id="listPopup" class="popup">
-                <div id="listPopupContent" class = "popupContent">
-                    <span class="close" onclick="closePopup('listPopup')">&times;</span>
-                    <h2>Create a list</h2>
+                <div id="listPopup" class="popup">
+                    <div id="listPopupContent" class = "popupContent">
+                        <span class="close" onclick="closePopup('listPopup')">&times;</span>
+                        <h2>Create a list</h2>
 
-                    <form th:action="@{/lists/add}" method="post">
-                        <label for="listName">List Title</label>
-                        <input id="listName" type="text" name="listName" placeholder="List Title" required>
+                        <form th:action="@{/lists/add}" method="post">
+                            <label for="listName">List Title</label>
+                            <input id="listName" type="text" name="listName" placeholder="List Title" required>
 
-                        <div id="listMoviesContainer">
-                        </div>
+                            <div id="listMoviesContainer">
+                            </div>
 
-                        <button type="button" onclick="addMovieInput()">+ Add Another Movie</button>
-                        <hr>
-                        <button type="submit" class="btnAdd">Create List</button>
-                    </form>
+                            <button type="button" onclick="addMovieInput()">+ Add Another Movie</button>
+                            <hr>
+                            <button type="submit" class="btnAdd">Create List</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
 
-            <form th:action="@{/logout}" method="post">
-                <button type="submit">Log Out</button>
-            </form>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">Log Out</button>
+                </form>
 
-        </th:block>
+            </th:block>
 
-        <th:block th:unless="${isLoggedIn}">
-            <a href="/login">Log in</a>
-            <a href="/register">Sign in</a>
-        </th:block>
-    </nav>
-</header>
+            <th:block th:unless="${isLoggedIn}">
+                <a href="/login">Log in</a>
+                <a href="/register">Sign in</a>
+            </th:block>
+        </nav>
+
+        <div th:if="${message}"
+             th:classappend="'alert-' + ${messageType}"
+             class="alert" role="alert">
+            <span th:text="${message}">Default Message</span>
+        </div>
+    </header>
 </body>
 </html>

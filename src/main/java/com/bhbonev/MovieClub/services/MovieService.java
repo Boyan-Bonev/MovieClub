@@ -20,4 +20,8 @@ public class MovieService {
     public List<Movie> searchByTerm(String term) {
         return movieRepository.findByTitleContainingIgnoreCase(term);
     }
+
+    public Movie searchByTitle(String title) {
+        return movieRepository.findByTitle(title).orElse(null);
+    }
 }

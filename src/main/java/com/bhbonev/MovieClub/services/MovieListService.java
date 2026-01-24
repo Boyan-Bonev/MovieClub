@@ -23,7 +23,7 @@ public class MovieListService {
 
     @Transactional
     public MovieList createList(User user, String name, List<Movie> movies) {
-        if (user == null || movies == null) {
+        if (user == null || movies == null || name.isBlank()) {
             return null;
         }
 
