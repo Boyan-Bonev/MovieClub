@@ -50,10 +50,6 @@ public class DataInitializer {
             if (movieRepository.count() == 0) {
                 movies = tmdbService.importPopularMovies();
             }
-
-            if (movieListRepository.count() == 0) {
-                movieListService.createList(user, "Popular movies", movies);
-            }
         };
     }
 }
