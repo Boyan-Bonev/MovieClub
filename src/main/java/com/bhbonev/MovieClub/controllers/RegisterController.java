@@ -18,11 +18,9 @@ public class RegisterController {
     private UserService userService;
 
     @GetMapping("/register")
-    public String showRegisterPage(
-            @AuthenticationPrincipal User user,
-            Model model) {
-        if (user != null) {
-            return "redirect:/logged";
+    public String showRegisterPage(Model model) {
+        if ((boolean) model.getAttribute("isLoggedIn")) {
+            return "redirect:/home";
         } else {
             UserDto userDto = new UserDto();
             model.addAttribute("user", userDto);
