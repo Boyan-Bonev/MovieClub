@@ -1,5 +1,6 @@
 package com.bhbonev.MovieClub.services;
 
+import com.bhbonev.MovieClub.dtos.MovieListDto;
 import com.bhbonev.MovieClub.models.Movie;
 import com.bhbonev.MovieClub.models.MovieList;
 import com.bhbonev.MovieClub.models.MovieListEntry;
@@ -61,5 +62,9 @@ public class MovieListService {
         }
 
         return savedMovieList;
+    }
+
+    public MovieList createList(String username, MovieListDto movieListDto) {
+        return createList(username, movieListDto.getListName(), movieListDto.getMovieTitles());
     }
 }

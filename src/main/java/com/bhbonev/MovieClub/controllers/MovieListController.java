@@ -29,7 +29,7 @@ public class MovieListController {
                           RedirectAttributes redirectAttributes) {
         try {
             String username = Objects.requireNonNull(model.getAttribute("username")).toString();
-            if (movieListService.createList(username, movieListDto.getListName(), movieListDto.getMovieTitles()) != null) {
+            if (movieListService.createList(username, movieListDto) != null) {
                 redirectAttributes.addFlashAttribute(
                         "message", "List successfully created!");
                 redirectAttributes.addFlashAttribute(
