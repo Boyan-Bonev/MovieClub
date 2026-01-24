@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html   lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: universalHeader}"></div>
+
+    <main layout:fragment="content">
+
+    </main>
+
+    <script th:src="@{/js/popup.js}"></script>
+    <script th:src="@{/js/setupSearch.js}"></script>
+    <script th:src="@{/js/addList.js}"></script>
+</body>
+</html>
